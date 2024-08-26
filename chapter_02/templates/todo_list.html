@@ -5,6 +5,18 @@
     <title>Title</title>
 </head>
 <body>
+    {% if request.user.is_authenticated %}
+        <div style="display: inline; margin-right: 10px">username : {{ request.user.username }}</div>
+        <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
+        <form action="{% url 'logout' %}", method="POST", style="display: inline; margin-right: 10px">
+            {% csrf_token %}
+            <button>로그아웃</button>
+        </form>
+    {% else %}
+        <a href="{% url 'signup' %}" style="display: inline; margin-right: 10px">회원가입</a>
+        <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
+    {% endif %}
+
     <h1>Todo List</h1>
     {% for todo in todos %}
         <a href="/todo/{{ todo.id }}"><h2>{{ todo.title }}</h2></a>
