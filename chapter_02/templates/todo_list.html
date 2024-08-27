@@ -1,26 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% if request.user.is_authenticated %}
-        <div style="display: inline; margin-right: 10px">username : {{ request.user.username }}</div>
-        <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
-        <form action="{% url 'logout' %}", method="POST", style="display: inline; margin-right: 10px">
-            {% csrf_token %}
-            <button>로그아웃</button>
-        </form>
-    {% else %}
-        <a href="{% url 'signup' %}" style="display: inline; margin-right: 10px">회원가입</a>
-        <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
-    {% endif %}
+{% extends 'base.html' %}
+{% block content %}
 
     <h1>Todo List</h1>
-    {% for todo in todos %}
-        <a href="/todo/{{ todo.id }}"><h2>{{ todo.title }}</h2></a>
+    <p style="text-align: right">
+        <a href="{% url 'todo_create' %}">
+            생성
+        </a>
+    </p>
+    {% for todo in page_obj %}
+        <a href="/todo/{{ todo.id }}"><h2>{{ todo.title }}<span> ({{ todo.author }})</span></h2></a>
     {% endfor %}
+    <div>
 
-</body>
-</html>
+    <form method="GET" style="margin-bottom: 20px">
+        <input name="q" type="text" placeholder="accounts 만들기 어렵다", value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+        <button>검색</button>
+    </form>
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo 첫번째</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
+    {% endif %}
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막</a>
+    {% endif %}
+    </div>
+
+{% endblock %}

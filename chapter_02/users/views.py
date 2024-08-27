@@ -18,11 +18,15 @@ def sign_up(request):
 
 
 def login(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, request.POST or None)
-        if form.is_valid():
-            django_login(request, form.get_user())
-            return redirect("/todo")
+    form = AuthenticationForm(request, request.POST or None)
+    if form.is_valid():
+        django_login(request, form.get_user())
+
+        next = request.GET.get("next")
+        if next:
+            return redirect(next)
+
+        return redirect("/todo")
     else:
         form = AuthenticationForm()
 

@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
+    {% if request.user == todo.author %}
+        <p style="text-align: right">
+            <a href="{% url 'todo_update' todo.id%}">
+                수정
+            </a>
+        </p>
+        <form action="{% url 'todo_delete' todo.id %}" method="POST" style="text-align: right">
+            {% csrf_token %}
+            <button>삭제</button>
+        </form>
+    {% endif %}
+
     <h1>Id : {{ todo.id }}</h1>
     <hr>
     <h1>Title : {{ todo.title }}</h1>
@@ -21,5 +29,5 @@
     <hr>
     <h1>Done : {{ todo.is_completed }}</h1>
     <hr>
-</body>
-</html>
+
+{% endblock %}
