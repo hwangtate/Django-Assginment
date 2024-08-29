@@ -1,30 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>nav</title>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between">
+    <div class="d-flex justify-content-between py-1 px-4">
 
         <div >
-            <a href="/todo">홈</a>
+            <a href="/todo" class="text-decoration-none">홈</a>
         </div>
 
         <div>
             {% if request.user.is_authenticated %}
             <div style="display: inline; margin-right: 10px">username : {{ request.user.username }}</div>
-            <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
-            <form action="{% url 'logout' %}", method="POST", style="display: inline; margin-right: 10px">
+            <a href="{% url 'login' %}" class="text-decoration-none" style="display: inline; margin-right: 10px">로그인</a>
+            <form action="{% url 'logout' %}" method="POST" style="display: inline; margin-right: 10px" >
                 {% csrf_token %}
-                <button>로그아웃</button>
+                <button class="text-decoration-none">로그아웃</button>
             </form>
         </div>
 
-        <div>
+        <div >
             {% else %}
-                <a href="{% url 'signup' %}" style="display: inline; margin-right: 10px">회원가입</a>
-                <a href="{% url 'login' %}" style="display: inline; margin-right: 10px">로그인</a>
+                <a href="{% url 'signup' %}" style="display: inline; margin-right: 10px" class="text-decoration-none">회원가입</a>
+                <a href="{% url 'login' %}" style="display: inline; margin-right: 10px" class="text-decoration-none">로그인</a>
             {% endif %}
         </div>
 
