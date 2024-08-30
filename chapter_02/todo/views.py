@@ -11,7 +11,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Todo, Comment
-from .forms import TodoForm, CommentForm
+from .forms import TodoForm, TodoUpdateForm, CommentForm
 
 
 class TodoListView(ListView):
@@ -34,54 +34,34 @@ class TodoListView(ListView):
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
     template_name = "todo_create.html"
-    # fields = ["title", "description", "done"]
+
     form_class = TodoForm
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.author = self.request.user
+        self.object.user = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy("todo_detail", kwargs={"pk": self.object.pk})
+        return reverse_lazy("todo_detail", kwargs={"pk": self.object.id})
 
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
     template_name = "todo_update.html"
-    form_class = TodoForm
+
+    form_class = TodoUpdateForm
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
 
-        if not self.request.user.is_superuser and self.request.user != obj.author:
-            raise Http404("You are not authorized to edit this Todo.")
-
+        if obj.user != self.request.user and not self.request.user.is_superuser:
+            raise Http404("해당 To Do를 수정할 권한이 없습니다.")
         return obj
 
     def get_success_url(self):
-        return reverse_lazy("todo_detail", kwargs={"pk": self.object.pk})
-
-
-class TodoDeleteView(LoginRequiredMixin, DeleteView):
-    model = Todo
-    template_name = "todo_list.html"
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.filter(author=self.request.user)
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-
-        if not self.request.user.is_superuser and self.request.user != obj.author:
-            raise Http404("You are not authorized to delete this Todo.")
-
-        return obj
-
-    def get_success_url(self):
-        return reverse_lazy("todo_list")
+        return reverse_lazy("todo_detail", kwargs={"pk": self.object.id})
 
 
 class TodoDetailView(LoginRequiredMixin, DetailView):
@@ -94,7 +74,7 @@ class TodoDetailView(LoginRequiredMixin, DetailView):
         obj = super().get_object(queryset)
 
         # 'user' 대신 실제 모델에 있는 필드명을 사용해야 합니다. 예: 'author'
-        if obj.author != self.request.user and not self.request.user.is_superuser:
+        if obj.user != self.request.user and not self.request.user.is_superuser:
             raise Http404("You do not have permission to view this Todo.")
         return obj
 

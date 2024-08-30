@@ -1,33 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
-
-    <h1>Todo List</h1>
-    <p style="text-align: right">
-        <a href="{% url 'todo_create' %}">
-            생성
-        </a>
-    </p>
-    {% for todo in page_obj %}
-        <a href="/todo/{{ todo.id }}"><h2>{{ todo.title }}<span> ({{ todo.author }})</span></h2></a>
-    {% endfor %}
-    <div>
-
-    <form method="GET" style="margin-bottom: 20px">
-        <input name="q" type="text" placeholder="accounts 만들기 어렵다", value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
-        <button>검색</button>
-    </form>
-
-    {% if page_obj.has_previous %}
-        <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo 첫번째</a>
-        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">이전</a>
-    {% endif %}
-    <span>
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </span>
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">다음</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">마지막</a>
-    {% endif %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        max-width: 40vw;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .pagination p {
+        color: gray;
+        text-decoration: none;
+        transition: background-color .3s;
+        margin: 0;
+    }
+    .pagination p:hover {
+        background-color: #ddd;
+        border-radius: 5px;
+        cursor: not-allowed;
+    }
+</style>
+<div class="container mt-lg-5">
+    {% if request.user.is_authenticated %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        {% if not request.user.is_staff %}
+            <h1>{{ request.user.username }}'s Todo List</h1>
+        {% else %}
+            <h1>All To Do List (By. Admin)</h1>
+        {% endif %}
+        <button class="btn btn-success" onclick="location.href='{% url 'todo_create' %}'">생성하기</button>
     </div>
-
+    <form method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="제목 또는 내용을 입력하세요." name="q" value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+    <div class="list-group mb-3">
+        {% for todo in page_obj.object_list %}
+            {% if todo.is_completed %}
+                <div class="list-group-item list-group-item-action">
+                    <img class="img-thumbnail" src="{{ todo.thumbnail.url }}" alt="썸네일이미지" style="width: 100px; height: 100px; object-fit: contain;">
+                    <a class="text-decoration-none text-black" href="{% url 'todo_detail' todo.id %}">[{{ todo.user.username }}]{{ todo.title }} (Completed)</a>
+                </div>
+            {% else %}
+                <div class="list-group-item list-group-item-action">
+                    <img class="img-thumbnail" src="{{ todo.thumbnail.url }}" alt="썸네일이미지" style="width: 100px; height: 100px; object-fit: contain;">
+                    <a class="text-decoration-none text-black" href="{% url 'todo_detail' todo.id %}">[{{ todo.user.username }}] {{ todo.title }}</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% include 'pagination.html' %}
+    {% endif %}
+</div>
 {% endblock %}
