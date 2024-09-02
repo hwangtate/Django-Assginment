@@ -9,23 +9,18 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import json
+
+import json, os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 환경변수
-with open(BASE_DIR / '.config_secret' / 'secret.json') as f:
-    config_secret_str = f.read()
-
-SECRET = json.loads(config_secret_str)
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = SECRET.get('DJANGO_SECRET_KEY')
+SECRET_KEY = "django-insecure-n=j*x5#1s+(mt85hr)l7*umo7xg)8&$&y%-k$gy+-kx!9)$i5("
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,65 +31,65 @@ ALLOWED_HOSTS = []
 # Application definition
 
 DJANGO_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 ]
 
 CUSTOM_APPS = [
-    'todo',
-    'users',
+    "todo",
+    "users",
 ]
 
 THIRD_PARTY_APPS = [
-    'django_extensions',
-    'django_summernote',
-    'django_cleanup',
+    "django_extensions",
+    "django_summernote",
+    "django_cleanup",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -104,16 +99,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -121,9 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -133,79 +128,72 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_DIRS = BASE_DIR / 'static'
+STATIC_URL = "static/"
+STATIC_DIRS = BASE_DIR / "static"
 STATICFILES_DIRS = [
     STATIC_DIRS,
 ]
-STATIC_ROOT = BASE_DIR / '.static_root'
+STATIC_ROOT = BASE_DIR / ".static_root"
 
 # Media files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # auth
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # login / logout
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = '/cbv/todo/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_URL = "/users/login/"
+LOGIN_REDIRECT_URL = "/cbv/todo/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 # summernote
 SUMMERNOTE_CONFIG = {
-    'iframe': True,
-
+    "iframe": True,
     # You can put custom Summernote settings
-    'summernote': {
+    "summernote": {
         # As an example, using Summernote Air-mode
-        'airMode': False,
-
+        "airMode": False,
         # Change editor size
-        'width': '100%',
-        'height': '480',
-
+        "width": "100%",
+        "height": "480",
         # Toolbar customization
         # https://summernote.org/deep-dive/#custom-toolbar-popover
-        'toolbar': [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture']],
-            ['view', ['fullscreen']],
+        "toolbar": [
+            ["style", ["style"]],
+            ["font", ["bold", "underline", "clear"]],
+            ["color", ["color"]],
+            ["para", ["ul", "ol", "paragraph"]],
+            ["table", ["table"]],
+            ["insert", ["link", "picture"]],
+            ["view", ["fullscreen"]],
         ],
-
         # Or, explicitly set language/locale for editor
-        'lang': 'ko-KR',
-
-        'codemirror': {
-            'mode': 'htmlmixed',
-            'lineNumbers': 'true',
+        "lang": "ko-KR",
+        "codemirror": {
+            "mode": "htmlmixed",
+            "lineNumbers": "true",
             # You have to include theme file in 'css' or 'css_for_inplace' before using it.
-            'theme': 'monokai',
+            "theme": "monokai",
         },
     },
-
     # Require users to be authenticated for uploading attachments.
-    'attachment_require_authentication': True,
-
+    "attachment_require_authentication": True,
     # You can completely disable the attachment feature.
-    'disable_attachment': False,
-
+    "disable_attachment": False,
     # Set to `False` to return attachment paths in relative URIs.
-    'attachment_absolute_uri': True,
+    "attachment_absolute_uri": True,
 }
+from dotenv import load_dotenv
 
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 # email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.naver.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = SECRET['EMAIL']['USER']
-EMAIL_HOST_PASSWORD = SECRET['EMAIL']['PASSWORD']
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
