@@ -302,3 +302,80 @@
 - 예제:
   ```python
   def my_view(request):
+
+
+      param = request.GET.get('param', 'default')
+  ```
+
+### response
+
+#### HttpResponseRedirect
+- **HttpResponseRedirect**: 리다이렉트 응답을 생성합니다.
+- 예제:
+  ```python
+  from django.http import HttpResponseRedirect
+
+  def my_view(request):
+      return HttpResponseRedirect('/some-url/')
+  ```
+
+#### HttpResponse
+- **HttpResponse**: 기본적인 HTTP 응답을 생성합니다.
+- 예제:
+  ```python
+  from django.http import HttpResponse
+
+  def my_view(request):
+      return HttpResponse('Hello, world!')
+  ```
+
+#### status code
+- **status code**: 응답 상태 코드를 지정합니다.
+- 예제:
+  ```python
+  from django.http import HttpResponse
+
+  def my_view(request):
+      return HttpResponse('Error', status=400)
+  ```
+
+#### response data
+- **response data**: 응답에 포함될 데이터를 설정합니다.
+- 예제:
+  ```python
+  from django.http import JsonResponse
+
+  def my_view(request):
+      data = {'key': 'value'}
+      return JsonResponse(data)
+  ```
+
+## 5. Django Mail
+
+### django.core.mail.send_mail
+- **send_mail**: 이메일을 보내는 함수입니다.
+- 예제:
+  ```python
+  from django.core.mail import send_mail
+
+  send_mail(
+      'Subject here',
+      'Here is the message.',
+      'from@example.com',
+      ['to@example.com'],
+      fail_silently=False,
+  )
+  ```
+
+### django.core.signing
+- **signing**: 데이터의 무결성을 검증하는 서명 기능을 제공합니다.
+
+### django.core.signing.TimestampSigner
+- **TimestampSigner**: 데이터에 타임스탬프를 추가하여 서명합니다.
+- 예제:
+  ```python
+  from django.core.signing import TimestampSigner
+
+  signer = TimestampSigner()
+  signed_value = signer.sign('value')
+  ```
